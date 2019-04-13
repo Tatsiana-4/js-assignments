@@ -374,18 +374,13 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-   // if (arr.length === 0) {
-   //    return 0;
-   // }
-   // arr.every(function (elm) {
-   //    let sumFalse = 0;
-   //    if (typeof elm !== 'number') {
-   //       sumFalse++;
-   //    }
-   //    return sumFalse;
-   // }
-   // )
+   if (arr.length === 0) {
+      return 0;
+   }
+   let arr2 = arr.filter(elm => !Boolean(elm));
+   return arr2.length;
 }
+
 
 
 /**
@@ -403,7 +398,8 @@ function getFalsyValuesCount(arr) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurences(arr, item) {
-   throw new Error('Not implemented');
+   let arr2 = arr.filter(elm => elm === item);
+   return arr2.length;
 }
 
 /**
@@ -418,7 +414,7 @@ function findAllOccurences(arr, item) {
  *    ['rock', 'paper', 'scissors']     => 'rock,paper,scissors'
  */
 function toStringList(arr) {
-   throw new Error('Not implemented');
+   return arr.join(',');
 }
 
 
@@ -447,7 +443,16 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  */
 function sortCitiesArray(arr) {
-   throw new Error('Not implemented');
+   return arr.sort(function (a, b) {
+      if (a.country === b.country) {
+         if (a.city > b.city) return 1;
+         else if (a.city < b.city) return -1;
+         else if (a.city === b.city) return 0;
+      }
+      if (a.country > b.country) return 1;
+      else if (a.country < b.country) return -1;
+   }
+   )
 }
 
 /**
@@ -469,7 +474,11 @@ function sortCitiesArray(arr) {
  *           [0,0,0,0,1]]   
  */
 function getIdentityMatrix(n) {
-   throw new Error('Not implemented');
+   return Array(n).fill(0).map(function (elm, i) {
+      return Array(n).fill(0).map(function (elm2, j) {
+         return 1 - Math.min(Math.abs(i - j), 1);
+      });
+   });
 }
 
 /**
@@ -486,7 +495,7 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-   throw new Error('Not implemented');
+   return Array(end - start + 1).fill().map((_, i) => start + i);
 }
 
 /**
@@ -501,7 +510,7 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-   throw new Error('Not implemented');
+   return arr.filter((elm, i, array) => array.indexOf(elm) === i);
 }
 
 /**
@@ -535,9 +544,12 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   throw new Error('Not implemented');
+   let map = new Map();
+   array.map((value, i) => {
+      map.set(keySelector(value), (map.get(keySelector(value)) === undefined ? [] : map.get(keySelector(value))).concat([valueSelector(value)]));
+   })
+   return map;
 }
-
 
 /**
  * Projects each element of the specified array to a sequence and flattens the resulting sequences into one array.
@@ -551,8 +563,9 @@ function group(array, keySelector, valueSelector) {
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
 function selectMany(arr, childrenSelector) {
-   throw new Error('Not implemented');
-}
+   return arr.map(childrenSelector).reduce((a, b) => a.concat(b))
+};
+
 
 
 /**
@@ -568,7 +581,7 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-   throw new Error('Not implemented');
+//
 }
 
 
@@ -591,7 +604,21 @@ function getElementByIndexes(arr, indexes) {
  * 
  */
 function swapHeadAndTail(arr) {
-   throw new Error('Not implemented');
+   let head = arr.slice(0, arr.length / 2);
+   let tail = 0;
+   let middle = arr[Math.round((arr.length - 1) / 2)]
+   let result = 0;
+   if (arr.length % 2 === 0) {
+      tail = arr.slice(arr.length / 2, arr.length);
+      result = tail.concat(head);
+      tail.push(arr.slice(arr.length / 2, arr.length));
+   }
+   else if (arr.length % 2 === 1) {
+      tail = arr.slice((arr.length / 2 + 1), arr.length)
+      result = tail.concat(middle).concat(head)
+   }
+   return result;
+
 }
 
 
