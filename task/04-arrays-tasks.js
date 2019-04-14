@@ -581,9 +581,8 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-//
+   return indexes.reduce( (acc, currentValue, i) => acc[currentValue] , arr); 
 }
-
 
 /**
  * Swaps the head and tail of the specified array:
