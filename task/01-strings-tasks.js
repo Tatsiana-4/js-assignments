@@ -22,7 +22,7 @@
  *   '',  'bb'  => 'bb'
  */
 function concatenateStrings(value1, value2) {
-    throw new Error('Not implemented');
+    return value1 + value2;
 }
 
 
@@ -38,7 +38,7 @@ function concatenateStrings(value1, value2) {
  *   ''      => 0
  */
 function getStringLength(value) {
-    throw new Error('Not implemented');
+    return value.length;
 }
 
 /**
@@ -55,7 +55,7 @@ function getStringLength(value) {
  *   'Chuck','Norris'  => 'Hello, Chuck Norris!'
  */
 function getStringFromTemplate(firstName, lastName) {
-    throw new Error('Not implemented');
+    return 'Hello, ' + firstName + ' ' + lastName + '!';
 }
 
 /**
@@ -69,7 +69,7 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
 function extractNameFromTemplate(value) {
-    throw new Error('Not implemented');
+    return value.slice(7, -1);
 }
 
 
@@ -84,7 +84,8 @@ function extractNameFromTemplate(value) {
  *   'cat'       => 'c'
  */
 function getFirstChar(value) {
-    throw new Error('Not implemented');
+    return value.slice(0, 1);
+
 }
 
 /**
@@ -99,7 +100,7 @@ function getFirstChar(value) {
  *   '\tHello, World! ' => 'Hello, World!'
  */
 function removeLeadingAndTrailingWhitespaces(value) {
-    throw new Error('Not implemented');
+    return value.trim();
 }
 
 /**
@@ -114,7 +115,7 @@ function removeLeadingAndTrailingWhitespaces(value) {
  *   'cat', 3 => 'catcatcat'
  */
 function repeatString(value, count) {
-    throw new Error('Not implemented');
+    return value.repeat(count);
 }
 
 /**
@@ -130,7 +131,7 @@ function repeatString(value, count) {
  *   'ABABAB','BA' => 'ABAB'
  */
 function removeFirstOccurrences(str, value) {
-    throw new Error('Not implemented');
+    return str.replace(value, '');
 }
 
 /**
@@ -145,7 +146,7 @@ function removeFirstOccurrences(str, value) {
  *   '<a>' => 'a'
  */
 function unbracketTag(str) {
-    throw new Error('Not implemented');
+    return str.replace('<', '').replace('>', '');
 }
 
 
@@ -160,7 +161,7 @@ function unbracketTag(str) {
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
 function convertToUpperCase(str) {
-    throw new Error('Not implemented');
+    return str.toLocaleUpperCase();
 }
 
 /**
@@ -174,7 +175,7 @@ function convertToUpperCase(str) {
  *   'info@gmail.com' => ['info@gmail.com']
  */
 function extractEmails(str) {
-    throw new Error('Not implemented');
+    return str.split(';');
 }
 
 /**
@@ -201,7 +202,39 @@ function extractEmails(str) {
  *
  */
 function getRectangleString(width, height) {
-    throw new Error('Not implemented');
+    let result = "";
+    let row = "";
+    for (let i = 1; i <= height; i++) {
+        row = "";
+        for (let j = 1; j <= width; j++) {
+            if (j == 1) {
+                if (i == 1) {
+                    row += '┌';
+                } else if (i == height) {
+                    row += '└';
+                } else {
+                    row += '│';
+                }
+            } else if (j == width) {
+                if (i == 1) {
+                    row += '┐';
+                } else if (i == height) {
+                    row += '┘';
+                } else {
+                    row += '│';
+                }
+            } else if (i == 1 || i == height) {
+                row += '─';
+            } else {
+                row += ' ';
+            }
+
+        }
+        result += row + "\n";
+    }
+    return result;
+
+
 }
 
 
@@ -221,7 +254,10 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-    throw new Error('Not implemented');
+    return str.replace(/[A-Za-z]/g, function (c) {
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(
+            "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm".indexOf(c));
+    });
 }
 
 /**
@@ -235,10 +271,15 @@ function encodeToRot13(str) {
  *   isString([]) => false
  *   isString({}) => false
  *   isString('test') => true
- *   isString(new String('test')) => true
+ *   isString(new String('test')) => true // валится тест не верное утверждение бнужно обойти в if!!!!
  */
 function isString(value) {
-    throw new Error('Not implemented');
+    if (typeof value == 'string' || value instanceof String) {
+        return true
+    }
+    else {
+        return false
+    };
 }
 
 
@@ -267,7 +308,37 @@ function isString(value) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-    throw new Error('Not implemented');
+    let result = 0;
+    let first = value.length == 3 ? value.substr(0, 2) : value.substr(0, 1);
+    let second = value.length == 3 ? value.substr(2, 1) : value.substr(1, 1);;
+
+    switch (first) {
+        case 'A':
+            first = 1; break;
+        case 'J':
+            first = 11; break;
+        case 'Q':
+            first = 12; break;
+        case 'K':
+            first = 13; break;
+        default:
+            first = parseInt(first);
+    }
+    switch (second) {
+        case '♣':
+            second = 0; break;
+        case '♦':
+            second = 1; break;
+        case '♥':
+            second = 2; break;
+        case '♠':
+            second = 3; break;
+    }
+    first--;
+    result = first + second * 13;
+
+    return result;
+
 }
 
 

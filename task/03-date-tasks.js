@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   return Date.parse(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+   return Date.parse(value);
 }
 
 
@@ -56,7 +56,16 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   let year = date.getFullYear();
+   if (year % 4 != 0) {
+      return false;
+   } else if (year % 100 != 0) {
+      return true;
+   } else if (year % 400 != 0) {
+      return false;
+   } else {
+      return true;
+   }
 }
 
 
@@ -76,7 +85,28 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+   let diff = Math.abs(endDate.getTime() - startDate.getTime());
+
+   var hours = Math.floor(diff / (1000 * 60 * 60));
+   diff -= hours * (1000 * 60 * 60);
+
+   var minutes = Math.floor(diff / (1000 * 60));
+   diff -= minutes * (1000 * 60);
+
+   var seconds = Math.floor(diff / (1000));
+   diff -= seconds * (1000);
+
+   var mseconds = diff;
+
+   if (hours < 10) { hours = "0" + hours; }
+   if (minutes < 10) { minutes = "0" + minutes; }
+   if (seconds < 10) { seconds = "0" + seconds; }
+   if (mseconds < 10) {
+      mseconds = "00" + mseconds;
+   } else if (mseconds < 100) { mseconds = "0" + mseconds; }
+
+   let f = hours + ":" + minutes + ":" + seconds + "." + mseconds;
+   return f;
 }
 
 
@@ -94,14 +124,35 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+   var hour = date.getUTCHours();
+   var minute = date.getUTCMinutes();
+
+   if (hour < 0 || minute < 0) {
+      return -1;
+   }
+   if (hour == 12) {
+      hour = 0;
+   }
+   if (minute == 60) {
+      minute = 0;
+      hour += 1;
+   }
+   let hourAngle = (hour* 60 + minute) *0.5;
+   let minAngle = minute * 6;
+   let bwAngle = Math.abs(hourAngle - minAngle);
+   while (bwAngle > 180){
+      bwAngle = Math.abs(Math.min(360 - bwAngle, bwAngle));
+   }
+   let degrees = bwAngle;
+   let rad = Math.abs(degrees * Math.PI / 180);
+   return rad;
 }
 
 
 module.exports = {
-    parseDataFromRfc2822: parseDataFromRfc2822,
-    parseDataFromIso8601: parseDataFromIso8601,
-    isLeapYear: isLeapYear,
-    timeSpanToString: timeSpanToString,
-    angleBetweenClockHands: angleBetweenClockHands
+   parseDataFromRfc2822: parseDataFromRfc2822,
+   parseDataFromIso8601: parseDataFromIso8601,
+   isLeapYear: isLeapYear,
+   timeSpanToString: timeSpanToString,
+   angleBetweenClockHands: angleBetweenClockHands
 };
