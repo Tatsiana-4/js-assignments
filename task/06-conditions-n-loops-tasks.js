@@ -131,7 +131,24 @@ function isTriangle(a, b, c) {
  *  
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    class Point {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    let l1 = new Point(rect1.left, rect1.top);
+    let r1 = new Point(rect1.left + rect1.width, rect1.top + rect1.height);
+    let l2 = new Point(rect2.left, rect2.top);
+    let r2 = new Point(rect2.left + rect2.width, rect2.top + rect2.height);
+
+    let s = Math.max(0, Math.min(r1.x, r2.x) - Math.max(l1.x, l2.x)) * Math.max(0, Math.min(r1.y, r2.y) - Math.max(l1.y, l2.y));
+    if (s > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -211,7 +228,44 @@ function findFirstSingleChar(str) {
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-    throw new Error('Not implemented');
+    let arr = [];
+    if (a <= b && isStartIncluded === true) {
+        arr.push('[', a, ',');
+        if (isEndIncluded === true) {
+            arr.push(' ', b, ']')
+        }
+        else {
+            arr.push(' ', b, ')')
+        }
+    }
+    else if (a > b && isStartIncluded === true) {
+        arr.push('[', b, ',')
+        if (isEndIncluded === true) {
+            arr.push(' ', a, ']')
+        }
+        else {
+            arr.push(' ', a, ')')
+        }
+    }
+    if (a <= b && isStartIncluded === false) {
+        arr.push('(', a, ',');
+        if (isEndIncluded === true) {
+            arr.push(' ', b, ']')
+        }
+        else {
+            arr.push(' ', b, ')')
+        }
+    }
+    else if (a > b && isStartIncluded === false) {
+        arr.push('(', b, ',')
+        if (isEndIncluded === false) {
+            arr.push(' ', a, ')')
+        }
+        else {
+            arr.push(' ', a, ']')
+        }
+    }
+    return arr.join('');
 }
 
 
@@ -451,19 +505,24 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    // let arr = [];
-    // for (let i = 0; i < pathes.length; i++) {
-    //     let elm = pathes[i].split('');
-    //     let elm2 = pathes[i + 1].split('');
-    //     for (let j = 0; j < elm.length; j++) {
-    //         if (elm[j] == elm2[j]) {
-    //             arr.push(elm[j]);
-    //         }
-    //         else i++;
-    //     }
-    // }
-    // return arr.join('');
-    throw new Error('Not implemented');
+    let j = -1;
+    let r = true;
+    for (let i = 0; i < pathes[0].length; i++) {
+        if (r) {
+            j = i;
+        } else {
+            break;
+        }
+        let symbol = pathes[0][i];
+        for (let k = 0; k < pathes.length; k++) {
+            if (symbol != pathes[k][i]) {
+                r = false;
+            }
+        }
+    }
+    let result = pathes[0].substring(0, j);
+    return result.substring(0, result.lastIndexOf("/") + 1);
+
 }
 
 
